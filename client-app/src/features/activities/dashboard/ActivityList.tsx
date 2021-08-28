@@ -6,9 +6,17 @@ interface ILocalProps {
   activities: IActivity[]
   selectActivity: (id: string) => void
   deleteActivity: (id: string) => void
+  submitting: boolean
 }
 
-const ActivityList = ({ activities, selectActivity, deleteActivity }: ILocalProps) => {
+const ActivityList = ({ activities, selectActivity, deleteActivity, submitting }: ILocalProps) => {
+  const [target, setTarget] = React.useState('')
+
+  const handleActivityDelete = (e: React.SyntheticEvent<HTMLButtonElement>, id: string) => {
+    setTarget(e.currentTarget.name)
+    deleteActivity(id)
+  }
+
   return (
     <Segment>
       <Item.Group divided>
@@ -23,7 +31,14 @@ const ActivityList = ({ activities, selectActivity, deleteActivity }: ILocalProp
               </Item.Meta>
               <Item.Extra>
                 <Button floated='right' content='View' color='blue' onClick={() => selectActivity(activity.id)} />
-                <Button floated='right' content='Delete' color='red' onClick={() => deleteActivity(activity.id)} />
+                <Button
+                  name={activity.id}
+                  floated='right'
+                  content='Delete'
+                  color='red'
+                  onClick={(e) => handleActivityDelete(e, activity.id)}
+                  loading={submitting && target === activity.id}
+                />
                 <Label basic content={activity.category} />
               </Item.Extra>
             </Item.Content>

@@ -15,9 +15,10 @@ interface ILocalProps {
   closeForm: () => void
   createOrEdit: (activity: IActivity) => void
   deleteActivity: (id: string) => void
+  submitting: boolean
 }
 
-const ActivityDashboard = ({ activities, selectedActivity, selectActivity, cancelSelectActivity, editMode, openForm, closeForm, createOrEdit, deleteActivity }: ILocalProps) => {
+const ActivityDashboard = ({ activities, selectedActivity, selectActivity, cancelSelectActivity, editMode, openForm, closeForm, createOrEdit, deleteActivity, submitting }: ILocalProps) => {
   return (
     <Grid>
       <Grid.Column width='10'>
@@ -25,6 +26,7 @@ const ActivityDashboard = ({ activities, selectedActivity, selectActivity, cance
           activities={activities}
           selectActivity={selectActivity}
           deleteActivity={deleteActivity}
+          submitting={submitting}
         />
       </Grid.Column>
       <Grid.Column width='6'>
@@ -39,6 +41,7 @@ const ActivityDashboard = ({ activities, selectedActivity, selectActivity, cance
             closeForm={closeForm}
             activity={selectedActivity}
             createOrEdit={createOrEdit}
+            submitting={submitting}
           />}
       </Grid.Column>
     </Grid>
