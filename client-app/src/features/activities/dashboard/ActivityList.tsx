@@ -1,48 +1,26 @@
-import { observer } from 'mobx-react-lite'
 import * as React from 'react'
-import { Link } from 'react-router-dom'
-import { Button, Item, Label, Segment } from 'semantic-ui-react'
+import { observer } from 'mobx-react-lite'
+import { Header } from 'semantic-ui-react'
 import { useStore } from '../../../app/stores/store'
+import ActivityListItem from './ActivityListItem'
 
 const ActivityList = () => {
-  const [target, setTarget] = React.useState('')
   const { activityStore } = useStore()
-  const { deleteActivity, activitiesByDate, loading } = activityStore
-
-  const handleActivityDelete = (e: React.SyntheticEvent<HTMLButtonElement>, id: string) => {
-    setTarget(e.currentTarget.name)
-    deleteActivity(id)
-  }
+  const { groupedActivities } = activityStore
 
   return (
-    <Segment>
-      <Item.Group divided>
-        {activitiesByDate.map(activity => (
-          <Item key={activity.id}>
-            <Item.Content>
-              <Item.Header as='a'>{activity.title}</Item.Header>
-              <Item.Meta>{activity.date}</Item.Meta>
-              <Item.Meta>
-                <div>{activity.description}</div>
-                <div>{activity.city}, {activity.venue}</div>
-              </Item.Meta>
-              <Item.Extra>
-                <Button floated='right' content='View' color='blue' as={Link} to={`/activities/${activity.id}`} />
-                <Button
-                  name={activity.id}
-                  floated='right'
-                  content='Delete'
-                  color='red'
-                  onClick={(e) => handleActivityDelete(e, activity.id)}
-                  loading={loading && target === activity.id}
-                />
-                <Label basic content={activity.category} />
-              </Item.Extra>
-            </Item.Content>
-          </Item>
-        ))}
-      </Item.Group>
-    </Segment>
+    <>
+      {groupedActivities.map(([group, activities]) => (
+        <React.Fragment key={group}>
+          <Header sub color='teal'>
+            {group}
+          </Header>
+          {activities.map(activity => (
+            <ActivityListItem key={activity.id} activity={activity} />
+          ))}
+        </React.Fragment>
+      ))}
+    </>
   )
 }
 
