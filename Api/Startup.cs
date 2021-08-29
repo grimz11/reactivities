@@ -17,6 +17,7 @@ using Microsoft.OpenApi.Models;
 using Persistence;
 using Application.Core;
 using Api.Extentions;
+using FluentValidation.AspNetCore;
 
 namespace Api
 {
@@ -30,7 +31,10 @@ namespace Api
 
     public void ConfigureServices(IServiceCollection services)
     {
-      services.AddControllers();
+      services.AddControllers().AddFluentValidation(config =>
+      {
+        config.RegisterValidatorsFromAssemblyContaining<Create>();
+      });
       services.AddApplicationServices(_config);
     }
 
